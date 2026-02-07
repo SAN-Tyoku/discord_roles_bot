@@ -1,0 +1,281 @@
+{
+    "commands": {
+        "auth": {
+            "name": "auth",
+            "description": "認証設定を管理します",
+            "subcommands": {
+                "setup": {
+                    "name": "setup",
+                    "description": "認証パネルを作成します"
+                },
+                "channel": {
+                    "name": "channel",
+                    "description": "認証リクエストの通知チャンネルを設定します",
+                    "options": {
+                        "target": {
+                            "name": "target",
+                            "description": "通知を送信するチャンネル"
+                        }
+                    }
+                },
+                "modal": {
+                    "name": "modal",
+                    "description": "認証モーダルの質問を設定します"
+                },
+                "config": {
+                    "name": "config",
+                    "description": "現在の設定を表示します"
+                },
+                "status": {
+                    "name": "status",
+                    "description": "現在の設定と申請状況を確認します"
+                },
+                "dm_notification": {
+                    "name": "dm_notification",
+                    "description": "申請承認時のDM通知設定を変更します",
+                    "options": {
+                        "enable": {
+                            "name": "enable",
+                            "description": "通知を有効にするか"
+                        }
+                    }
+                },
+                "history": {
+                    "name": "history",
+                    "description": "ユーザーの申請履歴を確認します",
+                    "options": {
+                        "user": {
+                            "name": "user",
+                            "description": "履歴を確認するユーザー"
+                        }
+                    }
+                },
+                "blacklist": {
+                    "name": "blacklist",
+                    "description": "ブラックリストを管理します",
+                    "subcommands": {
+                        "add": {
+                            "name": "add",
+                            "description": "ユーザーをブラックリストに追加します",
+                            "options": {
+                                "user": {
+                                    "name": "user",
+                                    "description": "追加するユーザー"
+                                },
+                                "reason": {
+                                    "name": "reason",
+                                    "description": "理由"
+                                }
+                            }
+                        },
+                        "defaultReason": "理由なし",
+                        "remove": {
+                            "name": "remove",
+                            "description": "ユーザーをブラックリストから削除します",
+                            "options": {
+                                "user": {
+                                    "name": "user",
+                                    "description": "削除するユーザー"
+                                }
+                            }
+                        },
+                        "list": {
+                            "name": "list",
+                            "description": "ブラックリストの一覧を表示します"
+                        }
+                    }
+                }
+            }
+        },
+        "manage_role": {
+            "name": "manage_role",
+            "description": "ユーザーにロールを付与または削除します",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "管理対象のユーザー"
+                },
+                "role": {
+                    "name": "role",
+                    "description": "付与または削除するロール"
+                },
+                "action": {
+                    "name": "action",
+                    "description": "実行する操作",
+                    "choices": {
+                        "add": "付与",
+                        "remove": "削除"
+                    }
+                }
+            }
+        }
+    },
+    "runtime": {
+        "common": {
+            "error": "エラーが発生しました。",
+            "interactionError": "エラーが発生しました。しばらく経ってから再度お試しください。",
+            "guildOnly": "このコマンドはサーバー内でのみ使用できます。",
+            "permissionDenied": "このコマンドを実行する権限がありません。（管理者または認証担当者のみ）",
+            "notSet": "未設定",
+            "none": "なし",
+            "enabled": "有効",
+            "disabled": "無効",
+            "hours": "時間",
+            "minutes": "分",
+            "server": "サーバー"
+        },
+        "commands": {
+            "manageRole": {
+                "notFound": "指定されたロールが見つかりません。",
+                "hierarchyErrorBot": "エラー: ロール {role} はBotの役職より上位にあるため操作できません。",
+                "hierarchyErrorUser": "エラー: ロール {role} はあなたの最高役職 ({actorRole}) より上位（または同等）にあるため操作できません。",
+                "successAdd": "{user} にロール {role} を付与しました。",
+                "successRemove": "{user} からロール {role} を削除しました。",
+                "error": "ロールの変更中にエラーが発生しました。Botの権限（ロール管理権限やロールの順位）を確認してください。"
+            },
+            "auth": {
+                "blacklist": {
+                    "added": "{user} をブラックリストに追加しました。",
+                    "removed": "{user} をブラックリストから削除しました。",
+                    "empty": "ブラックリストに登録されているユーザーはいません。",
+                    "header": "ブラックリスト一覧",
+                    "error": {
+                        "add": "ブラックリストへの追加中にエラーが発生しました。",
+                        "remove": "ブラックリストからの削除中にエラーが発生しました。",
+                        "list": "リストの取得中にエラーが発生しました。"
+                    }
+                },
+                "setup": {
+                    "panelTitle": "認証パネル作成",
+                    "messageLabel": "パネルに表示するメッセージ",
+                    "placeholder": "認証申請を行うには下のボタンを押してください。",
+                    "success": "認証パネルを作成しました。",
+                    "error": "パネル作成中にエラーが発生しました。"
+                },
+                "channel": {
+                    "success": "認証通知チャンネルを {channel} に設定しました。",
+                    "error": "設定の保存中にエラーが発生しました。"
+                },
+                "modal": {
+                    "title": "認証モーダル質問設定",
+                    "label": "質問 {index} (最大45文字)",
+                    "success": "認証モーダルの質問を設定しました（全{count}問）。"
+                },
+                "config": {
+                    "notFound": "設定が見つかりません。通知チャンネルの設定などを行ってください。",
+                    "title": "現在の設定",
+                    "channel": "通知チャンネル",
+                    "panel": "パネル設置場所",
+                    "questions": "モーダル質問",
+                    "error": "設定の取得中にエラーが発生しました。"
+                },
+                "history": {
+                    "empty": "このユーザーの申請履歴はありません。",
+                    "title": "申請履歴: {user}",
+                    "status": "ステータス",
+                    "notes": "理由/メモ",
+                    "processor": "処理者",
+                    "error": "履歴の取得中にエラーが発生しました。"
+                },
+                "status": {
+                    "title": "システムステータス",
+                    "applicationStats": "申請状況",
+                    "pending": "待機中: {count}件",
+                    "approved": "承認済み: {count}件",
+                    "rejected": "却下済み: {count}件",
+                    "configStats": "設定状況",
+                    "notificationChannel": "通知CH",
+                    "panel": "パネル",
+                    "modalQuestions": "質問",
+                    "dmNotification": "DM通知",
+                    "systemStats": "システム",
+                    "uptime": "稼働時間",
+                    "ping": "Ping",
+                    "error": "ステータスの取得中にエラーが発生しました。"
+                },
+                "dm_notification": {
+                    "success": "DM通知を{status}に設定しました。",
+                    "error": "DM通知設定の更新中にエラーが発生しました。",
+                    "status": {
+                        "enabled": "有効",
+                        "disabled": "無効"
+                    }
+                }
+            }
+        },
+        "handlers": {
+            "modal": {
+                "panelSetup": {
+                    "noChannel": "先に `/auth channel` で通知チャンネルを設定してください。",
+                    "oldPanelDeleteError": "古いパネルの削除に失敗しました:",
+                    "notTextChannel": "テキストチャンネルで実行してください。",
+                    "success": "認証パネルを作成しました。",
+                    "permissionError": "エラー: このチャンネルにメッセージを送信する権限がBotにありません。「メッセージを送信」と「埋め込みリンク」の権限を確認してください。",
+                    "error": "パネル作成中にエラーが発生しました。",
+                    "buttonLabel": "認証申請",
+                    "cancelLabel": "申請キャンセル"
+                },
+                "questionConfig": {
+                    "success": "認証モーダルの質問を設定しました（全{count}問）。",
+                    "error": "質問設定の保存中にエラーが発生しました。"
+                },
+                "application": {
+                    "alreadyPending": "既に審査中の申請があります。",
+                    "noChannelError": "システムエラー: 通知チャンネルが設定されていません。管理者に連絡してください。",
+                    "title": "新規認証申請",
+                    "userId": "ユーザーID",
+                    "createdAt": "アカウント作成日",
+                    "approve": "承認",
+                    "reject": "却下",
+                    "notificationContent": "認証担当の方へ: {user} からの申請です。",
+                    "success": "認証申請を送信しました。承認をお待ちください。",
+                    "error": "申請の送信中にエラーが発生しました。",
+                    "rejectedTitle": "認証申請 - 却下済み",
+                    "rejectReason": "却下理由",
+                    "processor": "処理者"
+                }
+            },
+            "button": {
+                "blacklistError": "あなたはブラックリストに登録されているため申請できません。",
+                "noQuestions": "管理者がまだ質問を設定していません。",
+                "cancel": {
+                    "noPending": "現在、審査中の申請はありません。",
+                    "embedTitle": "認証申請 - キャンセル済み",
+                    "embedFooter": "申請者により取り下げられました",
+                    "success": "申請を取り下げました（キャンセルしました）。",
+                    "error": "キャンセルの処理中にエラーが発生しました。"
+                },
+                "approve": {
+                    "roleSelectPlaceholder": "付与するロールを選択（複数可）",
+                    "roleSelectMessage": "付与するロールを選択してください："
+                },
+                "reject": {
+                    "modalTitle": "申請却下",
+                    "reasonLabel": "却下理由"
+                }
+            },
+            "selectMenu": {
+                "processing": "処理中...",
+                "error": {
+                    "idNotFound": "エラー: IDが見つかりません。",
+                    "memberNotFound": "対象のユーザーがサーバーに見つかりません。退出した可能性があります。",
+                    "userInfoFetchFailed": "エラー: ユーザー情報の取得に失敗しました。",
+                    "roleIdNotFound": "エラー: ロールID {roleId} が見つかりません。",
+                    "roleHierarchyBot": "エラー: ロール {role} はBotの役職より上位にあるため付与できません。Botのロールを上げて、該当ロールより上に配置してください。",
+                    "roleHierarchyUser": "エラー: ロール {role} はあなたの最高役職 ({actorRole}) より上位（または同等）にあるため付与できません。",
+                    "generic": "ロール付与またはメッセージ更新中にエラーが発生しました。Botの権限を確認してください。"
+                },
+                "approved": {
+                    "embedTitle": "認証申請 - 承認済み",
+                    "grantedRoles": "付与ロール",
+                    "approver": "承認者"
+                },
+                "dm": {
+                    "title": "認証承認のお知らせ",
+                    "description": "サーバー **{guild}** での認証申請が承認されました。\n以下のロールが付与されました。"
+                },
+                "success": "承認処理が完了しました。{count}個のロールを付与しました。"
+            }
+        }
+    }
+}

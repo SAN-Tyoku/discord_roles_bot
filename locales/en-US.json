@@ -1,0 +1,263 @@
+{
+    "commands": {
+        "auth": {
+            "name": "auth",
+            "description": "Manage authentication settings",
+            "subcommands": {
+                "setup": {
+                    "name": "setup",
+                    "description": "Create authentication panel"
+                },
+                "channel": {
+                    "name": "channel",
+                    "description": "Set notification channel for auth requests",
+                    "options": {
+                        "target": {
+                            "name": "target",
+                            "description": "Channel to send notifications to"
+                        }
+                    }
+                },
+                "modal": {
+                    "name": "modal",
+                    "description": "Configure questions for auth modal"
+                },
+                "config": {
+                    "name": "config",
+                    "description": "Show current configuration"
+                },
+                "status": {
+                    "name": "status",
+                    "description": "Check current settings and application status"
+                },
+                "dm_notification": {
+                    "name": "dm_notification",
+                    "description": "Configure DM notification on approval",
+                    "options": {
+                        "enable": {
+                            "name": "enable",
+                            "description": "Enable notifications"
+                        }
+                    }
+                },
+                "history": {
+                    "name": "history",
+                    "description": "Check user application history",
+                    "options": {
+                        "user": {
+                            "name": "user",
+                            "description": "User to check history for"
+                        }
+                    }
+                },
+                "blacklist": {
+                    "name": "blacklist",
+                    "description": "Manage blacklist",
+                    "subcommands": {
+                        "add": {
+                            "name": "add",
+                            "description": "Add user to blacklist",
+                            "options": {
+                                "user": {
+                                    "name": "user",
+                                    "description": "User to add"
+                                },
+                                "reason": {
+                                    "name": "reason",
+                                    "description": "Reason"
+                                }
+                            }
+                        },
+                        "defaultReason": "No reason provided",
+                        "remove": {
+                            "name": "remove",
+                            "description": "Remove user from blacklist",
+                            "options": {
+                                "user": {
+                                    "name": "user",
+                                    "description": "User to remove"
+                                }
+                            }
+                        },
+                        "list": {
+                            "name": "list",
+                            "description": "Show blacklist"
+                        }
+                    }
+                }
+            }
+        },
+        "manage_role": {
+            "name": "manage_role",
+            "description": "Grant or remove roles from a user",
+            "options": {
+                "user": {
+                    "name": "user",
+                    "description": "Target user"
+                },
+                "role": {
+                    "name": "role",
+                    "description": "Role to grant or remove"
+                },
+                "action": {
+                    "name": "action",
+                    "description": "Action to perform",
+                    "choices": {
+                        "add": "Grant",
+                        "remove": "Remove"
+                    }
+                }
+            }
+        }
+    },
+    "runtime": {
+        "common": {
+            "error": "An error occurred.",
+            "interactionError": "An error occurred. Please try again later.",
+            "guildOnly": "This command can only be used within a server.",
+            "permissionDenied": "You do not have permission to execute this command.",
+            "notSet": "Not Set",
+            "none": "None",
+            "enabled": "Enabled",
+            "disabled": "Disabled",
+            "hours": "h",
+            "minutes": "m",
+            "server": "Server"
+        },
+        "commands": {
+            "manageRole": {
+                "notFound": "Specified role not found.",
+                "hierarchyErrorBot": "Error: Role {role} is higher than the Bot's role and cannot be managed.",
+                "hierarchyErrorUser": "Error: Role {role} is higher than or equal to your highest role ({actorRole}) and cannot be managed.",
+                "successAdd": "Granted role {role} to {user}.",
+                "successRemove": "Removed role {role} from {user}."
+            },
+            "auth": {
+                "blacklist": {
+                    "added": "Added {user} to blacklist.",
+                    "removed": "Removed {user} from blacklist.",
+                    "empty": "No users in blacklist.",
+                    "header": "Blacklist"
+                },
+                "setup": {
+                    "panelTitle": "Auth Panel Setup",
+                    "messageLabel": "Message on Panel",
+                    "placeholder": "Press the button below to apply for authentication.",
+                    "success": "Authentication panel created.",
+                    "error": "Failed to create panel."
+                },
+                "channel": {
+                    "success": "Set authentication notification channel to {channel}."
+                },
+                "modal": {
+                    "title": "Auth Modal Questions Config",
+                    "label": "Question {index} (Max 45 chars)",
+                    "success": " configured auth modal questions (Total {count})."
+                },
+                "config": {
+                    "notFound": "Configuration not found. Please set up notification channel first.",
+                    "title": "Current Configuration",
+                    "channel": "Notification Channel",
+                    "panel": "Panel Location",
+                    "questions": "Modal Questions"
+                },
+                "history": {
+                    "empty": "No application history for this user.",
+                    "title": "Application History: {user}",
+                    "status": "Status",
+                    "notes": "Reason/Notes",
+                    "processor": "Processor"
+                },
+                "status": {
+                    "title": "System Status",
+                    "applicationStats": "Applications",
+                    "pending": "Pending: {count}",
+                    "approved": "Approved: {count}",
+                    "rejected": "Rejected: {count}",
+                    "configStats": "Configuration",
+                    "notificationChannel": "Notification Channel",
+                    "panel": "Panel",
+                    "modalQuestions": "Questions",
+                    "dmNotification": "DM Notification",
+                    "systemStats": "System",
+                    "uptime": "Uptime",
+                    "ping": "Ping"
+                }
+            }
+        },
+        "handlers": {
+            "modal": {
+                "panelSetup": {
+                    "noChannel": "Please configure the notification channel first with `/auth channel`.",
+                    "oldPanelDeleteError": "Failed to delete old panel:",
+                    "notTextChannel": "Please execute in a text channel.",
+                    "success": "Authentication panel created.",
+                    "permissionError": "Error: The bot does not have permission to send messages in this channel. Please check 'Send Messages' and 'Embed Links' permissions.",
+                    "error": "An error occurred while creating the panel.",
+                    "buttonLabel": "Apply",
+                    "cancelLabel": "Cancel"
+                },
+                "questionConfig": {
+                    "success": "Configured auth modal questions (Total {count}).",
+                    "error": "An error occurred while saving question settings."
+                },
+                "application": {
+                    "alreadyPending": "You already have a pending application.",
+                    "noChannelError": "System Error: Notification channel is not configured. Please contact an administrator.",
+                    "title": "New Authentication Application",
+                    "userId": "User ID",
+                    "createdAt": "Account Created",
+                    "approve": "Approve",
+                    "reject": "Reject",
+                    "notificationContent": "To Auth Staff: Application from {user}.",
+                    "success": "Application submitted. Please wait for approval.",
+                    "error": "An error occurred while submitting the application.",
+                    "rejectedTitle": "Auth Application - Rejected",
+                    "rejectReason": "Rejection Reason",
+                    "processor": "Processor"
+                }
+            },
+            "button": {
+                "blacklistError": "You are blacklisted and cannot apply.",
+                "noQuestions": "No questions have been configured by the administrator.",
+                "cancel": {
+                    "noPending": "There are no pending applications.",
+                    "embedTitle": "Auth Application - Cancelled",
+                    "embedFooter": "Cancelled by applicant",
+                    "success": "Application cancelled.",
+                    "error": "An error occurred while cancelling the application."
+                },
+                "approve": {
+                    "roleSelectPlaceholder": "Select role(s) to grant",
+                    "roleSelectMessage": "Please select the role(s) to grant:"
+                },
+                "reject": {
+                    "modalTitle": "Reject Application",
+                    "reasonLabel": "Reason for rejection"
+                }
+            },
+            "selectMenu": {
+                "processing": "Processing...",
+                "error": {
+                    "idNotFound": "Error: ID not found.",
+                    "memberNotFound": "User not found in the server. They may have left.",
+                    "userInfoFetchFailed": "Error: Failed to fetch user info.",
+                    "roleIdNotFound": "Error: Role ID {roleId} not found.",
+                    "roleHierarchyBot": "Error: Role {role} is higher than the Bot's role and cannot be granted. Please move the Bot's role higher.",
+                    "roleHierarchyUser": "Error: Role {role} is higher than or equal to your highest role ({actorRole}) and cannot be granted.",
+                    "generic": "Error granting role or updating message. Please check Bot permissions."
+                },
+                "approved": {
+                    "embedTitle": "Auth Application - Approved",
+                    "grantedRoles": "Granted Roles",
+                    "approver": "Approver"
+                },
+                "dm": {
+                    "title": "Authentication Approved",
+                    "description": "Your authentication application in **{guild}** has been approved.\nThe following roles have been granted."
+                },
+                "success": "Approval process completed. Granted {count} roles."
+            }
+        }
+    }
+}
