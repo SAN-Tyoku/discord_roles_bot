@@ -2,6 +2,7 @@ import { ButtonInteraction, ModalBuilder, TextInputBuilder, TextInputStyle, Acti
 import { dbGet, dbRun, GuildConfig, AuthApplication } from '../db';
 import logger from '../utils/logger';
 import { i18n } from '../utils/i18n';
+import { isOptionalQuestion, stripOptionalMarker } from '../utils/questionHelper';
 
 export const handleButton = async (interaction: ButtonInteraction) => {
     const { customId, guildId } = interaction;
@@ -34,11 +35,13 @@ export const handleButton = async (interaction: ButtonInteraction) => {
                 .setTitle(i18n.t('runtime.handlers.modal.application.title', {}, interaction.locale));
 
             questions.forEach((q, i) => {
+                const optional = isOptionalQuestion(q);
+                const displayLabel = stripOptionalMarker(q);
                 const input = new TextInputBuilder()
                     .setCustomId(`q_${i}`)
-                    .setLabel(q.substring(0, 45))
+                    .setLabel(displayLabel.substring(0, 45))
                     .setStyle(TextInputStyle.Paragraph)
-                    .setRequired(true);
+                    .setRequired(!optional);
 
                 modal.addComponents(new ActionRowBuilder<TextInputBuilder>().addComponents(input));
             });

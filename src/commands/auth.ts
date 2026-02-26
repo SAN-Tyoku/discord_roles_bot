@@ -2,6 +2,7 @@ import { ChatInputCommandInteraction, EmbedBuilder, ModalBuilder, TextInputBuild
 import { dbRun, dbGet, dbAll, GuildConfig, AuthApplication, BlacklistEntry } from '../db';
 import logger from '../utils/logger';
 import { i18n } from '../utils/i18n';
+import { stripOptionalMarker } from '../utils/questionHelper';
 
 /**
  * Handles interactions for the /auth command.
@@ -116,6 +117,10 @@ export const handleAuthCommand = async (interaction: ChatInputCommandInteraction
                 .setMaxLength(45)
                 .setRequired(false);
 
+            if (i === 1) {
+                input.setPlaceholder(i18n.t('runtime.commands.auth.modal.optionalHint', {}, interaction.locale));
+            }
+
             rows.push(new ActionRowBuilder<TextInputBuilder>().addComponents(input));
         }
 
@@ -132,7 +137,7 @@ export const handleAuthCommand = async (interaction: ChatInputCommandInteraction
             }
 
             const questions = JSON.parse(config.modal_questions || '[]') as string[];
-            const questionList = questions.length > 0 ? questions.map((q, i) => `${i + 1}. ${q}`).join('\n') : i18n.t('runtime.common.notSet', {}, interaction.locale);
+            const questionList = questions.length > 0 ? questions.map((q, i) => `${i + 1}. ${stripOptionalMarker(q)}`).join('\n') : i18n.t('runtime.common.notSet', {}, interaction.locale);
 
             const embed = new EmbedBuilder()
                 .setTitle(i18n.t('runtime.commands.auth.config.title', {}, interaction.locale))

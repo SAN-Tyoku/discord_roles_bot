@@ -152,6 +152,7 @@
                 "modal": {
                     "title": "Auth Modal Questions Config",
                     "label": "Question {index} (Max 45 chars)",
+                    "optionalHint": "Prefix (*?) to make the answer optional",
                     "success": " configured auth modal questions (Total {count})."
                 },
                 "config": {

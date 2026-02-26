@@ -130,7 +130,7 @@ Main command for managing the authentication system.
 
 *   **`setup`**: Create and place the authentication panel.
 *   **`channel`**: Set the "Notification Channel" where applications are sent (Required).
-*   **`modal`**: Configure application questions (max 5).
+*   **`modal`**: Configure application questions (max 5). Prefix a question with `(*?)` to make it optional.
 *   **`status`**: Display current settings, application counts, and system status.
 *   **`config`**: Display current configuration (Notification target, Panel location, Questions).
 *   **`history [user]`**: Display past application history for a specific user.

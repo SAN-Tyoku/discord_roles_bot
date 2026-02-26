@@ -2,6 +2,7 @@ import { ModalSubmitInteraction, ActionRowBuilder, ButtonBuilder, ButtonStyle, E
 import { dbRun, dbGet, GuildConfig } from '../db';
 import logger from '../utils/logger';
 import { i18n } from '../utils/i18n';
+import { stripOptionalMarker } from '../utils/questionHelper';
 
 export const handleModal = async (interaction: ModalSubmitInteraction) => {
     const { customId, guildId } = interaction;
@@ -146,7 +147,7 @@ export const handleModal = async (interaction: ModalSubmitInteraction) => {
                 const questions = JSON.parse(config.modal_questions || '[]') as string[];
 
                 const fields = questions.map((q, i) => ({
-                    name: q,
+                    name: stripOptionalMarker(q),
                     value: answers[i] || i18n.t('runtime.common.none', {}, interaction.guildLocale || undefined),
                     inline: false
                 }));
