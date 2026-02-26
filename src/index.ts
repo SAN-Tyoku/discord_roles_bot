@@ -12,10 +12,7 @@ import logger from './utils/logger';
 dotenv.config({ quiet: true });
 
 const client = new Client({
-    intents: [
-        GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildMessages,
-    ]
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages],
 });
 
 // Load event handlers
@@ -23,7 +20,7 @@ const eventsPath = path.join(__dirname, 'events');
 const isDevelopment = path.extname(__filename) === '.ts';
 const eventFileExtension = isDevelopment ? '.ts' : '.js';
 
-const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith(eventFileExtension));
+const eventFiles = fs.readdirSync(eventsPath).filter((file) => file.endsWith(eventFileExtension));
 
 for (const file of eventFiles) {
     const filePath = path.join(eventsPath, file);

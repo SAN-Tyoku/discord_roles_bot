@@ -18,6 +18,10 @@
                         }
                     }
                 },
+                "help": {
+                    "name": "help",
+                    "description": "使い方とコマンド一覧を表示します"
+                },
                 "modal": {
                     "name": "modal",
                     "description": "認証モーダルの質問を設定します"
@@ -201,6 +205,13 @@
                         "enabled": "有効",
                         "disabled": "無効"
                     }
+                },
+                "help": {
+                    "title": "認証Bot - ヘルプ",
+                    "setupGuide": "初回セットアップ",
+                    "setupSteps": "以下の順序で設定してください:\n1. `/auth channel` - 申請通知を受け取るチャンネルを設定\n2. `/auth modal` - 申請時の質問を設定（最大5問）\n3. `/auth setup` - 認証パネルをチャンネルに設置\n\n以上で申請の受付が開始されます。",
+                    "commandList": "コマンド一覧",
+                    "commands": "`/auth setup` - 認証パネルの作成\n`/auth channel` - 通知チャンネルの設定\n`/auth modal` - 質問内容の設定\n`/auth config` - 現在の設定を表示\n`/auth status` - 申請状況とシステム情報\n`/auth history` - ユーザーの申請履歴\n`/auth dm_notification` - DM通知の切替\n`/auth blacklist` - ブラックリスト管理\n`/manage_role` - ロールの手動付与/削除"
                 }
             }
         },

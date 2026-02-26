@@ -18,7 +18,7 @@ class I18n {
             return;
         }
 
-        const files = fs.readdirSync(localesPath).filter(f => f.endsWith('.json'));
+        const files = fs.readdirSync(localesPath).filter((f) => f.endsWith('.json'));
         for (const file of files) {
             const locale = path.basename(file, '.json');
             try {
@@ -32,8 +32,8 @@ class I18n {
     }
 
     private localeMap: Record<string, string> = {
-        'ja': 'ja-JP',
-        'en': 'en-US',
+        ja: 'ja-JP',
+        en: 'en-US',
         // Add more mappings if needed
     };
 

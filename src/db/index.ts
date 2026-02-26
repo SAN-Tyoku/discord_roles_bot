@@ -54,7 +54,8 @@ export interface BlacklistEntry {
 export const initDb = (): Promise<void> => {
     return new Promise((resolve, reject) => {
         db.serialize(() => {
-            db.run(`CREATE TABLE IF NOT EXISTS GuildConfig (
+            db.run(
+                `CREATE TABLE IF NOT EXISTS GuildConfig (
                 guild_id TEXT PRIMARY KEY,
                 notification_channel_id TEXT,
                 panel_channel_id TEXT,
@@ -62,11 +63,14 @@ export const initDb = (): Promise<void> => {
                 auth_panel_message TEXT NOT NULL DEFAULT 'Click below to apply for authentication.',
                 modal_questions TEXT NOT NULL DEFAULT '[]',
                 dm_notification_enabled INTEGER NOT NULL DEFAULT 0
-            )`, (err: Error | null) => {
-                if (err) reject(err);
-            });
+            )`,
+                (err: Error | null) => {
+                    if (err) reject(err);
+                },
+            );
 
-            db.run(`CREATE TABLE IF NOT EXISTS AuthApplications (
+            db.run(
+                `CREATE TABLE IF NOT EXISTS AuthApplications (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id TEXT NOT NULL,
                 guild_id TEXT NOT NULL,
@@ -77,28 +81,33 @@ export const initDb = (): Promise<void> => {
                 processor_id TEXT,
                 notes TEXT,
                 notification_message_id TEXT
-            )`, (err: Error | null) => {
-                if (err) reject(err);
-                else {
-                    // Migration for adding columns (for existing DB)
-                    // Ignore errors (e.g., column already exists)
-                    db.run(`ALTER TABLE AuthApplications ADD COLUMN notification_message_id TEXT`, () => {
-                        // Continue regardless of success or failure
-                    });
-                }
-            });
+            )`,
+                (err: Error | null) => {
+                    if (err) reject(err);
+                    else {
+                        // Migration for adding columns (for existing DB)
+                        // Ignore errors (e.g., column already exists)
+                        db.run(`ALTER TABLE AuthApplications ADD COLUMN notification_message_id TEXT`, () => {
+                            // Continue regardless of success or failure
+                        });
+                    }
+                },
+            );
 
-            db.run(`CREATE TABLE IF NOT EXISTS Blacklist (
+            db.run(
+                `CREATE TABLE IF NOT EXISTS Blacklist (
                 user_id TEXT NOT NULL,
                 guild_id TEXT NOT NULL,
                 reason TEXT,
                 added_at INTEGER NOT NULL,
                 added_by TEXT NOT NULL,
                 PRIMARY KEY (user_id, guild_id)
-            )`, (err: Error | null) => {
-                if (err) reject(err);
-                else resolve();
-            });
+            )`,
+                (err: Error | null) => {
+                    if (err) reject(err);
+                    else resolve();
+                },
+            );
         });
     });
 };
@@ -125,7 +134,10 @@ export const dbRun = (sql: string, params: (string | number | boolean | null | u
  * @param {Array<string | number | boolean | null | undefined>} params SQL parameters
  * @returns {Promise<T | undefined>} Result row object, or undefined if not found
  */
-export const dbGet = <T>(sql: string, params: (string | number | boolean | null | undefined)[] = []): Promise<T | undefined> => {
+export const dbGet = <T>(
+    sql: string,
+    params: (string | number | boolean | null | undefined)[] = [],
+): Promise<T | undefined> => {
     return new Promise((resolve, reject) => {
         db.get(sql, params, (err: Error | null, row: unknown) => {
             if (err) reject(err);

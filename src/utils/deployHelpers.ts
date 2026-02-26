@@ -1,14 +1,11 @@
 import fs from 'fs';
 import path from 'path';
-import { SlashCommandBuilder, SlashCommandSubcommandBuilder, SlashCommandSubcommandGroupBuilder, SlashCommandStringOption, SlashCommandUserOption, SlashCommandRoleOption, SlashCommandChannelOption, SlashCommandBooleanOption, ContextMenuCommandBuilder } from 'discord.js';
-
-type LocaleMap = Record<string, any>;
 
 const localesPath = path.join(process.cwd(), 'locales');
 
 // Locale definitions to load (add more if needed)
 const LOCALE_CODES: Record<string, string> = {
-    'ja': 'ja-JP',
+    ja: 'ja-JP',
     // 'en-US' is treated as default, so it doesn't strictly need to be here, but logic explicitly excludes it
 };
 
@@ -17,7 +14,7 @@ const LOCALE_CODES: Record<string, string> = {
  * @returns {Record<string, any>} Keys are locale codes (en-US, ja-JP), values are JSON content
  */
 export function loadLocales(): Record<string, any> {
-    const files = fs.readdirSync(localesPath).filter(f => f.endsWith('.json'));
+    const files = fs.readdirSync(localesPath).filter((f) => f.endsWith('.json'));
     const data: Record<string, any> = {};
 
     for (const file of files) {
@@ -49,7 +46,7 @@ function getNestedValue(obj: any, path: string): any {
  */
 export function applyLocales(
     builder: any, // Any allowed for flexibility, or could use Union types
-    keyPath: string
+    keyPath: string,
 ) {
     // 1. Set default language (en-US)
     const defaultData = getNestedValue(loadedLocales[defaultLocale], keyPath);
@@ -90,10 +87,10 @@ export function applyLocales(
  * Applies localization to Choices
  */
 export function applyChoiceLocales(
-    choices: { name: string, value: string }[],
-    keyPath: string // e.g., "commands.manage_role.options.action.choices"
+    choices: { name: string; value: string }[],
+    keyPath: string, // e.g., "commands.manage_role.options.action.choices"
 ) {
-    return choices.map(choice => {
+    return choices.map((choice) => {
         const choiceKey = choice.value; // "add", "remove", etc.
         const nameLocalizations: Record<string, string> = {};
 

@@ -19,7 +19,7 @@ describe('Database Tests', () => {
     test('should initialize database tables', async () => {
         // Check if tables exist (refer to sqlite_master table)
         const tables = await dbAll<{ name: string }>("SELECT name FROM sqlite_master WHERE type='table'");
-        const tableNames = tables.map(t => t.name);
+        const tableNames = tables.map((t) => t.name);
         expect(tableNames).toContain('GuildConfig');
         expect(tableNames).toContain('AuthApplications');
         expect(tableNames).toContain('Blacklist');
@@ -34,20 +34,23 @@ describe('Database Tests', () => {
                 panel_message_id: '333',
                 auth_panel_message: 'Auth Here',
                 modal_questions: '[]',
-                dm_notification_enabled: 1
+                dm_notification_enabled: 1,
             };
 
-            await dbRun(`INSERT INTO GuildConfig (
+            await dbRun(
+                `INSERT INTO GuildConfig (
                 guild_id, notification_channel_id, panel_channel_id, panel_message_id, auth_panel_message, modal_questions, dm_notification_enabled
-            ) VALUES (?, ?, ?, ?, ?, ?, ?)`, [
-                config.guild_id,
-                config.notification_channel_id,
-                config.panel_channel_id,
-                config.panel_message_id,
-                config.auth_panel_message,
-                config.modal_questions,
-                config.dm_notification_enabled
-            ]);
+            ) VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [
+                    config.guild_id,
+                    config.notification_channel_id,
+                    config.panel_channel_id,
+                    config.panel_message_id,
+                    config.auth_panel_message,
+                    config.modal_questions,
+                    config.dm_notification_enabled,
+                ],
+            );
 
             const result = await dbGet<GuildConfig>('SELECT * FROM GuildConfig WHERE guild_id = ?', ['123456']);
             expect(result).toBeDefined();
@@ -74,18 +77,15 @@ describe('Database Tests', () => {
                 guild_id: 'guild1',
                 status: 'pending',
                 answers: JSON.stringify(['Answer 1']),
-                applied_at: Date.now()
+                applied_at: Date.now(),
             };
 
-            await dbRun(`INSERT INTO AuthApplications (
+            await dbRun(
+                `INSERT INTO AuthApplications (
                 user_id, guild_id, status, answers, applied_at
-            ) VALUES (?, ?, ?, ?, ?)`, [
-                app.user_id,
-                app.guild_id,
-                app.status,
-                app.answers,
-                app.applied_at
-            ]);
+            ) VALUES (?, ?, ?, ?, ?)`,
+                [app.user_id, app.guild_id, app.status, app.answers, app.applied_at],
+            );
 
             const results = await dbAll<AuthApplication>('SELECT * FROM AuthApplications WHERE user_id = ?', ['user1']);
             expect(results.length).toBe(1);
@@ -101,18 +101,15 @@ describe('Database Tests', () => {
                 guild_id: 'guild1',
                 reason: 'Spam',
                 added_at: Date.now(),
-                added_by: 'admin1'
+                added_by: 'admin1',
             };
 
-            await dbRun(`INSERT INTO Blacklist (
+            await dbRun(
+                `INSERT INTO Blacklist (
                 user_id, guild_id, reason, added_at, added_by
-            ) VALUES (?, ?, ?, ?, ?)`, [
-                entry.user_id,
-                entry.guild_id,
-                entry.reason,
-                entry.added_at,
-                entry.added_by
-            ]);
+            ) VALUES (?, ?, ?, ?, ?)`,
+                [entry.user_id, entry.guild_id, entry.reason, entry.added_at, entry.added_by],
+            );
 
             const result = await dbGet<BlacklistEntry>('SELECT * FROM Blacklist WHERE user_id = ?', ['bad_user']);
             expect(result).toBeDefined();

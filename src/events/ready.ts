@@ -1,5 +1,4 @@
 import { Client, Events } from 'discord.js';
-import { deployCommands } from '../scripts/deploy';
 import { initDb } from '../db';
 import logger from '../utils/logger';
 

@@ -1,4 +1,14 @@
-import { ButtonInteraction, ModalBuilder, TextInputBuilder, TextInputStyle, ActionRowBuilder, RoleSelectMenuBuilder, MessageFlags, EmbedBuilder, TextChannel } from 'discord.js';
+import {
+    ButtonInteraction,
+    ModalBuilder,
+    TextInputBuilder,
+    TextInputStyle,
+    ActionRowBuilder,
+    RoleSelectMenuBuilder,
+    MessageFlags,
+    EmbedBuilder,
+    TextChannel,
+} from 'discord.js';
 import { dbGet, dbRun, GuildConfig, AuthApplication } from '../db';
 import logger from '../utils/logger';
 import { i18n } from '../utils/i18n';
@@ -11,14 +21,26 @@ export const handleButton = async (interaction: ButtonInteraction) => {
 
     if (customId === 'auth_start') {
         try {
-            const blacklist = await dbGet('SELECT * FROM Blacklist WHERE user_id = ? AND guild_id = ?', [interaction.user.id, guildId]);
+            const blacklist = await dbGet('SELECT * FROM Blacklist WHERE user_id = ? AND guild_id = ?', [
+                interaction.user.id,
+                guildId,
+            ]);
             if (blacklist) {
-                await interaction.reply({ content: i18n.t('runtime.handlers.button.blacklistError', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+                await interaction.reply({
+                    content: i18n.t('runtime.handlers.button.blacklistError', {}, interaction.locale),
+                    flags: MessageFlags.Ephemeral,
+                });
                 return;
             }
-            const existing = await dbGet('SELECT * FROM AuthApplications WHERE user_id = ? AND guild_id = ? AND status = "pending"', [interaction.user.id, guildId]);
+            const existing = await dbGet(
+                'SELECT * FROM AuthApplications WHERE user_id = ? AND guild_id = ? AND status = "pending"',
+                [interaction.user.id, guildId],
+            );
             if (existing) {
-                await interaction.reply({ content: i18n.t('runtime.handlers.modal.application.alreadyPending', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+                await interaction.reply({
+                    content: i18n.t('runtime.handlers.modal.application.alreadyPending', {}, interaction.locale),
+                    flags: MessageFlags.Ephemeral,
+                });
                 return;
             }
 
@@ -26,7 +48,10 @@ export const handleButton = async (interaction: ButtonInteraction) => {
             const questions = JSON.parse(config?.modal_questions || '[]') as string[];
 
             if (questions.length === 0) {
-                await interaction.reply({ content: i18n.t('runtime.handlers.button.noQuestions', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+                await interaction.reply({
+                    content: i18n.t('runtime.handlers.button.noQuestions', {}, interaction.locale),
+                    flags: MessageFlags.Ephemeral,
+                });
                 return;
             }
 
@@ -47,18 +72,25 @@ export const handleButton = async (interaction: ButtonInteraction) => {
             });
 
             await interaction.showModal(modal);
-
         } catch (error) {
             logger.error(error);
-            await interaction.reply({ content: i18n.t('runtime.common.error', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t('runtime.common.error', {}, interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
         }
-
     } else if (customId === 'auth_cancel_application') {
         try {
-            const pendingApp = await dbGet<AuthApplication>('SELECT * FROM AuthApplications WHERE user_id = ? AND guild_id = ? AND status = "pending"', [interaction.user.id, guildId]);
+            const pendingApp = await dbGet<AuthApplication>(
+                'SELECT * FROM AuthApplications WHERE user_id = ? AND guild_id = ? AND status = "pending"',
+                [interaction.user.id, guildId],
+            );
 
             if (!pendingApp) {
-                await interaction.reply({ content: i18n.t('runtime.handlers.button.cancel.noPending', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+                await interaction.reply({
+                    content: i18n.t('runtime.handlers.button.cancel.noPending', {}, interaction.locale),
+                    flags: MessageFlags.Ephemeral,
+                });
                 return;
             }
 
@@ -68,16 +100,32 @@ export const handleButton = async (interaction: ButtonInteraction) => {
                 const config = await dbGet<GuildConfig>('SELECT * FROM GuildConfig WHERE guild_id = ?', [guildId]);
                 if (config && config.notification_channel_id) {
                     try {
-                        const channel = await interaction.guild?.channels.fetch(config.notification_channel_id) as TextChannel;
+                        const channel = (await interaction.guild?.channels.fetch(
+                            config.notification_channel_id,
+                        )) as TextChannel;
                         if (channel) {
-                            const message = await channel.messages.fetch(pendingApp.notification_message_id).catch(() => null);
+                            const message = await channel.messages
+                                .fetch(pendingApp.notification_message_id)
+                                .catch(() => null);
                             if (message) {
                                 const oldEmbed = message.embeds[0];
                                 if (oldEmbed) {
                                     const newEmbed = EmbedBuilder.from(oldEmbed)
-                                        .setTitle(i18n.t('runtime.handlers.button.cancel.embedTitle', {}, interaction.guildLocale || undefined))
+                                        .setTitle(
+                                            i18n.t(
+                                                'runtime.handlers.button.cancel.embedTitle',
+                                                {},
+                                                interaction.guildLocale || undefined,
+                                            ),
+                                        )
                                         .setColor(0x808080)
-                                        .setFooter({ text: i18n.t('runtime.handlers.button.cancel.embedFooter', {}, interaction.guildLocale || undefined) });
+                                        .setFooter({
+                                            text: i18n.t(
+                                                'runtime.handlers.button.cancel.embedFooter',
+                                                {},
+                                                interaction.guildLocale || undefined,
+                                            ),
+                                        });
 
                                     await message.edit({ embeds: [newEmbed], components: [] });
                                 }
@@ -89,13 +137,17 @@ export const handleButton = async (interaction: ButtonInteraction) => {
                 }
             }
 
-            await interaction.reply({ content: i18n.t('runtime.handlers.button.cancel.success', {}, interaction.locale), flags: MessageFlags.Ephemeral });
-
+            await interaction.reply({
+                content: i18n.t('runtime.handlers.button.cancel.success', {}, interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
         } catch (error) {
             logger.error(error);
-            await interaction.reply({ content: i18n.t('runtime.handlers.button.cancel.error', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t('runtime.handlers.button.cancel.error', {}, interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
         }
-
     } else if (customId.startsWith('auth_approve_')) {
         const targetUserId = customId.split('_')[2];
         const messageId = interaction.message.id;
@@ -108,8 +160,11 @@ export const handleButton = async (interaction: ButtonInteraction) => {
 
         const row = new ActionRowBuilder<RoleSelectMenuBuilder>().addComponents(roleSelect);
 
-        await interaction.reply({ content: i18n.t('runtime.handlers.button.approve.roleSelectMessage', {}, interaction.locale), components: [row], flags: MessageFlags.Ephemeral });
-
+        await interaction.reply({
+            content: i18n.t('runtime.handlers.button.approve.roleSelectMessage', {}, interaction.locale),
+            components: [row],
+            flags: MessageFlags.Ephemeral,
+        });
     } else if (customId.startsWith('auth_reject_')) {
         const targetUserId = customId.split('_')[2];
 

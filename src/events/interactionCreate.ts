@@ -1,4 +1,4 @@
-import { Events, Interaction, MessageFlags } from 'discord.js';
+import { Events, Interaction } from 'discord.js';
 import { handleCommand } from '../handlers/commandHandler';
 import { handleModal } from '../handlers/modalHandler';
 import { handleButton } from '../handlers/buttonHandler';
@@ -25,7 +25,10 @@ export default {
 
             if (interaction.isRepliable()) {
                 try {
-                    const message = { content: i18n.t('runtime.common.interactionError', {}, interaction.locale), ephemeral: true };
+                    const message = {
+                        content: i18n.t('runtime.common.interactionError', {}, interaction.locale),
+                        ephemeral: true,
+                    };
                     if (interaction.replied || interaction.deferred) {
                         await interaction.followUp(message);
                     } else {

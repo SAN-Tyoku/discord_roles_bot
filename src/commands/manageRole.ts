@@ -10,7 +10,10 @@ export const handleManageRoleCommand = async (interaction: ChatInputCommandInter
     const guildId = interaction.guildId;
 
     if (!guildId || !interaction.guild) {
-        await interaction.reply({ content: i18n.t('runtime.common.guildOnly', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+        await interaction.reply({
+            content: i18n.t('runtime.common.guildOnly', {}, interaction.locale),
+            flags: MessageFlags.Ephemeral,
+        });
         return;
     }
 
@@ -21,21 +24,31 @@ export const handleManageRoleCommand = async (interaction: ChatInputCommandInter
 
         if (!hasPermission && config && config.notification_channel_id) {
             const channel = interaction.guild.channels.cache.get(config.notification_channel_id);
-            const fetchedChannel = channel || await interaction.guild.channels.fetch(config.notification_channel_id).catch(() => null);
+            const fetchedChannel =
+                channel || (await interaction.guild.channels.fetch(config.notification_channel_id).catch(() => null));
 
-            if (fetchedChannel && fetchedChannel.permissionsFor(interaction.user.id)?.has(PermissionFlagsBits.ViewChannel)) {
+            if (
+                fetchedChannel &&
+                fetchedChannel.permissionsFor(interaction.user.id)?.has(PermissionFlagsBits.ViewChannel)
+            ) {
                 hasPermission = true;
             }
         }
 
         if (!hasPermission) {
-            await interaction.reply({ content: i18n.t('runtime.common.permissionDenied', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t('runtime.common.permissionDenied', {}, interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
             return;
         }
 
         const targetRole = await interaction.guild.roles.fetch(role.id);
         if (!targetRole) {
-            await interaction.reply({ content: i18n.t('runtime.commands.manageRole.notFound', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t('runtime.commands.manageRole.notFound', {}, interaction.locale),
+                flags: MessageFlags.Ephemeral,
+            });
             return;
         }
 
@@ -45,12 +58,26 @@ export const handleManageRoleCommand = async (interaction: ChatInputCommandInter
         const isOwner = interaction.guild.ownerId === actor.id;
 
         if (botMember && targetRole.comparePositionTo(botMember.roles.highest) >= 0) {
-            await interaction.reply({ content: i18n.t('runtime.commands.manageRole.hierarchyErrorBot', { role: targetRole.toString() }, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t(
+                    'runtime.commands.manageRole.hierarchyErrorBot',
+                    { role: targetRole.toString() },
+                    interaction.locale,
+                ),
+                flags: MessageFlags.Ephemeral,
+            });
             return;
         }
 
         if (!isOwner && targetRole.comparePositionTo(actorHighestRole) >= 0) {
-            await interaction.reply({ content: i18n.t('runtime.commands.manageRole.hierarchyErrorUser', { role: targetRole.toString(), actorRole: actorHighestRole.toString() }, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t(
+                    'runtime.commands.manageRole.hierarchyErrorUser',
+                    { role: targetRole.toString(), actorRole: actorHighestRole.toString() },
+                    interaction.locale,
+                ),
+                flags: MessageFlags.Ephemeral,
+            });
             return;
         }
 
@@ -58,14 +85,30 @@ export const handleManageRoleCommand = async (interaction: ChatInputCommandInter
 
         if (action === 'add') {
             await member.roles.add(role.id);
-            await interaction.reply({ content: i18n.t('runtime.commands.manageRole.successAdd', { user: user.toString(), role: role.toString() }, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t(
+                    'runtime.commands.manageRole.successAdd',
+                    { user: user.toString(), role: role.toString() },
+                    interaction.locale,
+                ),
+                flags: MessageFlags.Ephemeral,
+            });
         } else {
             await member.roles.remove(role.id);
-            await interaction.reply({ content: i18n.t('runtime.commands.manageRole.successRemove', { user: user.toString(), role: role.toString() }, interaction.locale), flags: MessageFlags.Ephemeral });
+            await interaction.reply({
+                content: i18n.t(
+                    'runtime.commands.manageRole.successRemove',
+                    { user: user.toString(), role: role.toString() },
+                    interaction.locale,
+                ),
+                flags: MessageFlags.Ephemeral,
+            });
         }
-
     } catch (error) {
         logger.error(error);
-        await interaction.reply({ content: i18n.t('runtime.commands.manageRole.error', {}, interaction.locale), flags: MessageFlags.Ephemeral });
+        await interaction.reply({
+            content: i18n.t('runtime.commands.manageRole.error', {}, interaction.locale),
+            flags: MessageFlags.Ephemeral,
+        });
     }
 };

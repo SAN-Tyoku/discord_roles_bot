@@ -18,6 +18,10 @@
                         }
                     }
                 },
+                "help": {
+                    "name": "help",
+                    "description": "Show usage guide and command list"
+                },
                 "modal": {
                     "name": "modal",
                     "description": "Configure questions for auth modal"
@@ -183,6 +187,13 @@
                     "systemStats": "System",
                     "uptime": "Uptime",
                     "ping": "Ping"
+                },
+                "help": {
+                    "title": "Auth Bot - Help",
+                    "setupGuide": "Initial Setup",
+                    "setupSteps": "Follow these steps to get started:\n1. `/auth channel` - Set the channel to receive applications\n2. `/auth modal` - Configure application questions (max 5)\n3. `/auth setup` - Place the auth panel in a channel\n\nApplications will start being accepted after setup.",
+                    "commandList": "Commands",
+                    "commands": "`/auth setup` - Create auth panel\n`/auth channel` - Set notification channel\n`/auth modal` - Configure questions\n`/auth config` - Show current settings\n`/auth status` - Application stats & system info\n`/auth history` - User application history\n`/auth dm_notification` - Toggle DM notifications\n`/auth blacklist` - Manage blacklist\n`/manage_role` - Manually grant/remove roles"
                 }
             }
         },

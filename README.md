@@ -128,6 +128,7 @@ ESLint and Prettier are configured to maintain code quality.
 ### `/auth` (Admin/Processor)
 Main command for managing the authentication system.
 
+*   **`help`**: Show initial setup guide and command list.
 *   **`setup`**: Create and place the authentication panel.
 *   **`channel`**: Set the "Notification Channel" where applications are sent (Required).
 *   **`modal`**: Configure application questions (max 5). Prefix a question with `(*?)` to make it optional.
